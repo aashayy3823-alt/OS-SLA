@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Disk Scheduling Simulator | LOOK &amp; C-LOOK</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <header class="title-bar">
+    <div>
+      <h1>Disk Scheduling Simulator</h1>
+      <p>Operating Systems | Compare LOOK and C-LOOK disk-head movement</p>
+    </div>
+    <span class="badge">SLA Stage 2 · Group 5</span>
+  </header>
+
+  <main class="layout">
+
+    <!-- LEFT PANEL: inputs -->
+    <section class="panel inputs">
+      <h2>Input Parameters</h2>
+      <p class="hint">Set the request queue and scheduling direction.</p>
+
+      <form id="sim-form" novalidate>
+        <label for="head">Initial Head Position</label>
+        <input id="head" type="text" inputmode="numeric" autocomplete="off">
+
+        <label for="queue">Disk Request Queue</label>
+        <input id="queue" type="text" autocomplete="off" placeholder="e.g. 98, 183, 37, 122">
+
+        <label for="direction">Initial Direction</label>
+        <select id="direction">
+          <option value="increasing">Increasing (higher tracks first)</option>
+          <option value="decreasing">Decreasing (lower tracks first)</option>
+        </select>
+
+        <label for="algorithm">Select Algorithm</label>
+        <select id="algorithm">
+          <option value="LOOK">LOOK</option>
+          <option value="C-LOOK">C-LOOK</option>
+        </select>
+
+        <div class="btn-row">
+          <button type="submit" class="btn primary">Simulate</button>
+          <button type="button" id="reset" class="btn secondary">Reset</button>
+        </div>
+      </form>
+
+      <div id="error" class="error" role="alert" hidden></div>
+
+      <div class="note">
+        <h3>Performance measure</h3>
+        <p>THM sums the absolute track differences between consecutive head positions. C-LOOK wraparound counts as movement.</p>
+      </div>
+      <div class="note">
+        <h3>Validation</h3>
+        <p>Non-negative integer tracks and a non-empty request queue.</p>
+      </div>
+    </section>
+
+    <!-- RIGHT PANEL: results -->
+    <section class="panel results">
+      <div class="results-head">
+        <h2>Simulation Process</h2>
+        <span id="status" class="status">Complete</span>
+      </div>
+      <p id="subtitle" class="hint"></p>
+
+      <div class="metrics">
+        <div class="metric"><span>Requests</span><strong id="m-count">–</strong></div>
+        <div class="metric"><span>Total Head Movement</span><strong id="m-thm">–</strong></div>
+        <div class="metric"><span>Avg. Movement / Request</span><strong id="m-avg">–</strong></div>
+        <div class="metric"><span>Starting Track</span><strong id="m-start">–</strong></div>
+      </div>
+
+      <h3>Service Sequence</h3>
+      <div id="sequence" class="sequence"></div>
+
+      <h3>Head Movement Chart</h3>
+      <svg id="chart" class="chart" viewBox="0 0 700 260" role="img" aria-label="Head position over service steps"></svg>
+
+      <h3>Step-by-Step Head Movement</h3>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Step</th><th>From</th><th>To</th><th>Movement</th><th>Cumulative</th><th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="trace"></tbody>
+        </table>
+      </div>
+      <p id="avg-note" class="footnote"></p>
+
+      <h3>Output Comparison</h3>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Measure</th><th>LOOK</th><th>C-LOOK</th></tr>
+          </thead>
+          <tbody id="compare"></tbody>
+        </table>
+      </div>
+      <p id="conclusion" class="conclusion"></p>
+    </section>
+
+  </main>
+
+  <footer class="footer">Operating System | SLA Stage 2 · Group 5</footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
